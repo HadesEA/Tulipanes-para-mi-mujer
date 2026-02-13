@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escena Romántica Nocturna</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        .scene {
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(to bottom, #0a1128 0%, #1a2332 50%, #2a3550 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Estrellas en el fondo */
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Luciérnagas */
+        .firefly {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ffeb3b;
+            box-shadow: 0 0 15px #ffeb3b, 0 0 30px #ffeb3b;
+            animation: float 8s infinite ease-in-out;
+            opacity: 0;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty));
+                opacity: 0;
+            }
+        }
+
+        /* Contenedor de ramos */
+        .garden {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 380px;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            padding: 0 3%;
+        }
+
+        /* Ramo de tulipanes */
+        .bouquet {
+            position: relative;
+            width: 180px;
+            height: 280px;
+            animation: sway 3.5s infinite ease-in-out;
+            transform-origin: bottom center;
+        }
+
+        .bouquet:nth-child(2) { animation-delay: -0.7s; }
+        .bouquet:nth-child(3) { animation-delay: -1.4s; }
+        .bouquet:nth-child(4) { animation-delay: -2.1s; }
+        .bouquet:nth-child(5) { animation-delay: -2.8s; }
+
+        @keyframes sway {
+            0%, 100% {
+                transform: rotate(-1.5deg);
+            }
+            50% {
+                transform: rotate(1.5deg);
+            }
+        }
+
+        /* Tulipán individual */
+        .tulip {
+            position: absolute;
+            bottom: 0;
+        }
+
+        /* Tallo del tulipán */
+        .stem {
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, #2d5016 0%, #3d6b1f 70%, #4a7f25 100%);
+            border-radius: 2px;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        /* Moñito que une los tallos */
+        .ribbon {
+            position: absolute;
+            bottom: 85px;
+            left: 45%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 40px;
+            z-index: 200;
+        }
+
+        /* Lazo izquierdo del moño */
+        .ribbon-loop.left {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #fde047 0%, #fbbf24 50%, #f59e0b 100%);
+            border-radius: 50% 0 50% 50%;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%) rotate(-30deg);
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Lazo derecho del moño */
+        .ribbon-loop.right {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+            border-radius: 0 50% 50% 50%;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%) rotate(30deg);
+            box-shadow: -2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Nudo central del moño */
+        .ribbon-center {
+            position: absolute;
+            width: 18px;
+            height: 22px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            border-radius: 3px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            z-index: 2;
+        }
+
+        /* Puntas colgantes del moño */
+        .ribbon-tail {
+            position: absolute;
+            width: 12px;
+            height: 25px;
+            background: linear-gradient(to bottom, #fbbf24 0%, #f59e0b 100%);
+            top: 70%;
+            border-radius: 4px;
+        }
+
+        .ribbon-tail.left {
+            left: 23%;
+            transform: rotate(40deg);
+            clip-path: polygon(0 0, 100% 0, 70% 100%, 30% 100%);
+        }
+
+        .ribbon-tail.right {
+            right: 23%;
+            transform: rotate(-40deg);
+            clip-path: polygon(0 0, 100% 0, 70% 100%, 30% 100%);
+        }
+
+        /* Flor del tulipán - forma ovalada cerrada */
+        .flower {
+            width: 32px;
+            height: 45px;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Pétalos con forma de tulipán cerrado */
+        .petal {
+            position: absolute;
+            width: 16px;
+            height: 42px;
+            border-radius: 50% 50% 25% 25%;
+            bottom: 0;
+            box-shadow: inset -2px 0 8px rgba(0,0,0,0.1);
+        }
+
+        /* Disposición de pétalos formando tulipán cerrado */
+        .petal:nth-child(1) {
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 6;
+        }
+
+        .petal:nth-child(2) {
+            left: 4px;
+            transform: rotate(-12deg);
+            z-index: 5;
+        }
+
+        .petal:nth-child(3) {
+            right: 4px;
+            transform: rotate(12deg);
+            z-index: 5;
+        }
+
+        .petal:nth-child(4) {
+            left: -1px;
+            transform: rotate(-25deg);
+            z-index: 4;
+        }
+
+        .petal:nth-child(5) {
+            right: -1px;
+            transform: rotate(25deg);
+            z-index: 4;
+        }
+
+        .petal:nth-child(6) {
+            left: -4px;
+            transform: rotate(-38deg);
+            z-index: 3;
+        }
+
+        /* Colores de tulipanes con degradados realistas */
+        .tulip.red .petal { 
+            background: linear-gradient(to top, #e11d48 0%, #fda4af 100%);
+        }
+        .tulip.pink .petal { 
+            background: linear-gradient(to top, #ec4899 0%, #fce7f3 100%);
+        }
+        .tulip.yellow .petal { 
+            background: linear-gradient(to top, #facc15 0%, #fef9c3 100%);
+        }
+        .tulip.purple .petal { 
+            background: linear-gradient(to top, #a855f7 0%, #f3e8ff 100%);
+        }
+        .tulip.orange .petal { 
+            background: linear-gradient(to top, #f97316 0%, #ffedd5 100%);
+        }
+
+        /* Luna */
+        .moon {
+            position: absolute;
+            top: 80px;
+            right: 120px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #f1f3f5;
+            box-shadow: 0 0 40px rgba(241, 243, 245, 0.6);
+        }
+
+        .moon-crater {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(173, 181, 189, 0.3);
+        }
+
+        .crater1 { width: 15px; height: 15px; top: 20px; left: 25px; }
+        .crater2 { width: 10px; height: 10px; top: 50px; left: 60px; }
+        .crater3 { width: 12px; height: 12px; top: 65px; left: 30px; }
+    </style>
+</head>
+<body>
+    <div class="scene">
+        <!-- Luna -->
+        <div class="moon">
+            <div class="moon-crater crater1"></div>
+            <div class="moon-crater crater2"></div>
+            <div class="moon-crater crater3"></div>
+        </div>
+
+        <!-- Estrellas -->
+        <div class="stars" id="stars"></div>
+
+        <!-- Luciérnagas -->
+        <div id="fireflies"></div>
+
+        <!-- Jardín de ramos de tulipanes -->
+        <div class="garden" id="garden"></div>
+    </div>
+
+    <script>
+        // Crear estrellas
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = Math.random() * 3 + 'px';
+            star.style.height = star.style.width;
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 70 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Crear luciérnagas
+        const firefliesContainer = document.getElementById('fireflies');
+        for (let i = 0; i < 25; i++) {
+            const firefly = document.createElement('div');
+            firefly.className = 'firefly';
+            
+            const startX = Math.random() * window.innerWidth;
+            const startY = Math.random() * (window.innerHeight - 250);
+            
+            firefly.style.left = startX + 'px';
+            firefly.style.top = startY + 'px';
+            
+            const tx = (Math.random() - 0.5) * 400;
+            const ty = (Math.random() - 0.5) * 300;
+            
+            firefly.style.setProperty('--tx', tx + 'px');
+            firefly.style.setProperty('--ty', ty + 'px');
+            
+            firefly.style.animationDelay = Math.random() * 8 + 's';
+            firefly.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            
+            firefliesContainer.appendChild(firefly);
+        }
+
+        // Crear ramos de tulipanes
+        const gardenContainer = document.getElementById('garden');
+        const colors = ['red', 'pink', 'yellow', 'purple', 'orange'];
+        
+        // Función para crear un tulipán
+        function createTulip(color, height) {
+            const tulip = document.createElement('div');
+            tulip.className = `tulip ${color}`;
+            
+            const flower = document.createElement('div');
+            flower.className = 'flower';
+            
+            // Crear 6 pétalos
+            for (let i = 0; i < 6; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                flower.appendChild(petal);
+            }
+            
+            const stem = document.createElement('div');
+            stem.className = 'stem';
+            stem.style.height = height + 'px';
+            
+            tulip.appendChild(stem);
+            tulip.appendChild(flower);
+            
+            return tulip;
+        }
+        
+        // Función para crear el moñito
+        function createRibbon() {
+            const ribbon = document.createElement('div');
+            ribbon.className = 'ribbon';
+            
+            const center = document.createElement('div');
+            center.className = 'ribbon-center';
+            
+            const loopLeft = document.createElement('div');
+            loopLeft.className = 'ribbon-loop left';
+            
+            const loopRight = document.createElement('div');
+            loopRight.className = 'ribbon-loop right';
+            
+            const tailLeft = document.createElement('div');
+            tailLeft.className = 'ribbon-tail left';
+            
+            const tailRight = document.createElement('div');
+            tailRight.className = 'ribbon-tail right';
+            
+            ribbon.appendChild(loopLeft);
+            ribbon.appendChild(loopRight);
+            ribbon.appendChild(center);
+            ribbon.appendChild(tailLeft);
+            ribbon.appendChild(tailRight);
+            
+            return ribbon;
+        }
+        
+        // Posiciones para crear forma de corazón
+        // Los tulipanes exteriores forman los lados del corazón
+        // Los centrales forman la parte inferior puntiaguda
+        const heartPositions = [
+            // Punta superior izquierda del corazón
+            { x: 30, y: 70, height: 190, angle: -25 },
+            { x: 40, y: 80, height: 185, angle: -20 },
+            
+            // Punta superior derecha del corazón
+            { x: 120, y: 80, height: 185, angle: 20 },
+            { x: 130, y: 70, height: 190, angle: 25 },
+            
+            // Curvas superiores (lóbulos del corazón)
+            { x: 50, y: 60, height: 180, angle: -15 },
+            { x: 110, y: 60, height: 180, angle: 15 },
+            
+            // Centro superior
+            { x: 80, y: 50, height: 175, angle: 0 },
+            
+            // Laterales medios
+            { x: 60, y: 40, height: 165, angle: -8 },
+            { x: 100, y: 40, height: 165, angle: 8 },
+            
+            // Punta inferior del corazón (el más bajo y centrado, pero más cerca)
+            { x: 80, y: 25, height: 150, angle: 0 }
+        ];
+        
+        // Crear 5 ramos
+        for (let bouquetIndex = 0; bouquetIndex < 5; bouquetIndex++) {
+            const bouquet = document.createElement('div');
+            bouquet.className = 'bouquet';
+            
+            const bouquetColor = colors[bouquetIndex];
+            
+            // Crear 10 tulipanes por ramo usando las posiciones en forma de corazón
+            heartPositions.forEach((pos, index) => {
+                const tulip = createTulip(bouquetColor, pos.height);
+                
+                // Posicionar el tulipán
+                tulip.style.left = pos.x + 'px';
+                tulip.style.bottom = pos.y + 'px';
+                
+                // Rotación de la flor
+                const flowerRotation = (Math.random() - 0.5) * 8;
+                tulip.querySelector('.flower').style.transform = `translateX(-50%) rotate(${flowerRotation}deg)`;
+                
+                // Inclinar el tallo hacia el centro para que se junten
+                const stemAngle = pos.angle + (Math.random() - 0.5) * 3;
+                tulip.querySelector('.stem').style.transform = `rotate(${stemAngle}deg)`;
+                
+                // Z-index invertido: entre más bajo (menor y), más al frente (mayor z-index)
+                // Restamos de 200 para que los más bajos tengan mayor z-index
+                tulip.style.zIndex = 200 - pos.y;
+                
+                bouquet.appendChild(tulip);
+            });
+            
+            // Agregar el moñito al ramo
+            const ribbon = createRibbon();
+            bouquet.appendChild(ribbon);
+            
+            gardenContainer.appendChild(bouquet);
+        }
+    </script>
+</body>
+</html>
